@@ -9,11 +9,25 @@ public class preprocess
 {
 	public static void main(String[] args)
 	{
-		//eliminateMissing();
-		//range();
-		//discretize();
-		//splitdata();
-		splitdata_dt();
+		switch(args[0])
+		{
+			case 0:
+				// Remove records with missing value
+				eliminateMissing();
+				break;
+			case 1:
+				// Calculate value range in raw data
+				range();
+				break;
+			case 2:
+				// Descritize contineous value
+				discretize();
+				break;
+			case 3:
+				// Split raw data into features and values
+				splitdata();
+				break;
+		}
 	}
 	
 	public static void eliminateMissing()

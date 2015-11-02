@@ -2,10 +2,9 @@ import numpy as np
 import csv
 reader = csv.reader(open('dt_data.data', 'r'))
 dicts = []
-limit = 20000
-counter = 0
+
+# Read in training feature
 for row in reader:
-	counter = counter+1
 	dict = {}
 	dict['age'] = long(row[0])
 	dict['workclass'] = row[1]
@@ -22,30 +21,25 @@ for row in reader:
 	dict['hours-per-week'] = long(row[12])
 	dict['native-country'] = row[13]
 	dicts.append(dict)
-	if(counter==limit):
-		break
 
+# Import and initialize dictionary vetorizer
 from sklearn.feature_extraction import DictVectorizer
 vec = DictVectorizer()
 data = vec.fit_transform(dicts).toarray()
-# trainname = vec.get_feature_names()
-# f = open('trainname','w')
-# for i in range(0,len(trainname)):
-# 	f.write(trainname[i]+'\n')
-# f.close()
 print(len(data))
 print(len(data[0]))
+
+# Read in training label
 reader = csv.reader(open('dt_label.data', 'r'))
 label0 = []
-counter = 0
 for row in reader:
-	counter = counter+1
 	label0.append(row)
 	if(counter==limit):
 		break
 print(len(label0))
 label = np.array(label0)
 
+# Import and initialize data model
 from sklearn.neighbors import KNeighborsClassifier
 clf = KNeighborsClassifier(n_neighbors=3, algorithm='auto')
 clf.fit(data, label)
@@ -55,6 +49,7 @@ a = np.array(['L','H'])
 print(clf.predict(data[6])==a[0])
 print(clf.predict(data[7])==a[1])
 
+# Read in testing feature
 reader = csv.reader(open('dt_data.test', 'r'))
 dicts2 = []
 for row in reader:
@@ -78,11 +73,8 @@ for row in reader:
 testdata = vec.fit_transform(dicts2).toarray()
 print(len(testdata))
 print(len(testdata[0]))
-# testname = vec.get_feature_names()
-# f = open('testname','w')
-# for i in range(0,len(testname)):
-# 	f.write(testname[i]+'\n')
-# f.close()
+
+# Read in testing label
 reader = csv.reader(open('dt_label.test', 'r'))
 testlabel0 = []
 for row in reader:
@@ -90,6 +82,7 @@ for row in reader:
 print(len(testlabel0))
 testlabel = np.array(testlabel0)
 
+# Predict and calculate accuracy
 count = 0
 for i in range(0,len(testdata)):
 	if(clf.predict(testdata[i])==testlabel[i]):
